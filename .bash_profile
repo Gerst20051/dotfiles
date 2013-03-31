@@ -1,0 +1,71 @@
+# Add directories to PATH
+export PATH=$PATH:~/bin
+
+# Increase size of bash history
+HISTFILESIZE=2500
+
+# default add color to ls
+# G - colorized output
+# F - Visual Classification of Files With Special Characters
+# a - show hidden files/folders
+# l - list format
+alias ls="ls -GFalh"
+alias sl="ls"
+
+# The 'ls' family
+# Add colors for filetype and human-readable sizes by default on 'ls':
+alias lk="ls -lSr"   # Sort by size, biggest last
+alias lt="ls -ltr"   # Sort by date, most recent last
+alias lc="ls -ltcr"  # Sort by/show change time, most recent last
+alias lu="ls -ltur"  # Sort by/show access time, most recent last
+alias lr="ls -R"     # Recursive ls
+alias la="\ls -A"    # Show hidden files
+alias ll="\ls -l"    # List
+alias l.="ls -d .*"  # Only show hidden files
+alias lp="ls -p"     # Show folders
+
+# add to grep: color, line numbers, context of 1 line
+alias grep="grep --color -n -B 1"
+
+# a couple misc/simple commands
+alias c="clear"
+alias h="history"
+alias cd..="cd .."
+alias ..="cd .."
+alias vi="vim"
+
+# safe file operations
+alias cp="cp -i"
+alias mv="mv -i"
+alias rm="rm -i"
+alias mkdir="mkdir -p"
+
+# prety-print of PATH variable
+alias path="echo -e ${PATH//:/\\\n}"
+
+# go back x directories
+b() {
+	str=""
+	count=0
+	while [ "$count" -lt "$1" ];
+	do
+		str=$str"../"
+		let count=count+1
+	done
+	cd $str
+}
+
+# make and cd into a directory
+function mcd() {
+	mkdir -p "$1" && cd "$1";
+}
+
+# search for process
+alias tm='ps -ef | grep'
+
+# show which commands you use the most
+alias freq='cut -f1 -d" " ~/.bash_history | sort | uniq -c | sort -nr | head -n 30'
+
+if [ -f ~/.bash_aliases ]; then
+	. ~/.bash_aliases
+fi
