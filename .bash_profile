@@ -4,6 +4,7 @@ export PATH=$PATH:~/dropbox/bin
 # Add colors to terminal
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
+# default ======exfxcxdxbxegedabagacad
 
 # Increase size of bash history
 HISTFILESIZE=2500
