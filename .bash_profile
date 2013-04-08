@@ -1,6 +1,10 @@
 # Add directories to PATH
 export PATH=$PATH:~/dropbox/bin
 
+# Add colors to terminal
+export CLICOLOR=1
+export LSCOLORS=GxFxCxDxBxegedabagaced
+
 # Increase size of bash history
 HISTFILESIZE=2500
 
@@ -68,4 +72,8 @@ alias freq='cut -f1 -d" " ~/.bash_history | sort | uniq -c | sort -nr | head -n 
 
 if [ -f ~/.bash_aliases ]; then
 	. ~/.bash_aliases
+fi
+
+if [ -f ~/.bashrc ]; then
+	. ~/.bashrc
 fi
