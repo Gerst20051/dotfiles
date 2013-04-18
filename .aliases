@@ -1,5 +1,3 @@
-#!/bin/tcsh
-
 # Add colors to terminal
 setenv CLICOLOR yes
 setenv LSCOLORS ExGxFxdxCxegedabagExEx
