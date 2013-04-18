@@ -51,7 +51,7 @@ alias mkdir mkdir -p
 alias mcd 'mkdir \!* && cd \!*'
 
 # search for process
-alias tm ps -ef | grep
+alias tm 'ps -ef | grep'
 
 # show which commands you use the most
 alias freq 'cut -f1 -d" " ~/.bash_history | sort | uniq -c | sort -nr | head -n 30'
