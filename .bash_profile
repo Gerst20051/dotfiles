@@ -75,6 +75,36 @@ alias freq='cut -f1 -d" " ~/.bash_history | sort | uniq -c | sort -nr | head -n 
 alias unc='ssh gerst@login.cs.unc.edu'
 alias unc-tasks='unc "cat ~/tasks.txt"'
 
+# git aliases
+alias ga='git add'
+alias ga.='git add .'
+alias gu='git pull'
+alias gp='git push'
+alias gl='git log'
+alias gs='git status'
+alias gh='git show \$1 --color'
+alias gd='git diff --color'
+alias gds='git diff --stat --color'
+alias gdc='git diff --cached --color'
+alias gm='git commit -m'
+alias gma='git commit -am'
+# alias gc='git commit -am \$1'
+alias gb='git branch'
+# alias gb='git branch \$1'
+alias gc='git checkout'
+alias gco='git checkout \$1'
+alias gra='git remote add'
+alias grr='git remote rm'
+alias gpu='git pull'
+alias gcl='git clone'
+
+# git workflow example
+# vi file.c
+# gd                     # git diff
+# ga file.c              # git add file.c
+# gm 'added feature x'   # git commit -m 'added feature x'
+# gp                     # git push
+
 if [ -f ~/.bash_aliases ]; then
 	. ~/.bash_aliases
 fi
