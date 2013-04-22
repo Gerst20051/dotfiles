@@ -73,7 +73,7 @@ alias freq='cut -f1 -d" " ~/.bash_history | sort | uniq -c | sort -nr | head -n 
 
 # quick ssh to unc cs server
 alias unc='ssh gerst@login.cs.unc.edu'
-alias unc-tasks='unc "cat ~/tasks.txt"'
+alias unctasks='unc "cat ~/tasks.txt"'
 
 # git aliases
 alias ga='git add'
@@ -97,13 +97,6 @@ alias gra='git remote add'
 alias grr='git remote rm'
 alias gpu='git pull'
 alias gcl='git clone'
-
-# git workflow example
-# vi file.c
-# gd                     # git diff
-# ga file.c              # git add file.c
-# gm 'added feature x'   # git commit -m 'added feature x'
-# gp                     # git push
 
 if [ -f ~/.bash_aliases ]; then
 	. ~/.bash_aliases
