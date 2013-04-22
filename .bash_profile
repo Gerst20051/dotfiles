@@ -71,6 +71,10 @@ alias tm='ps -ef | grep'
 # show which commands you use the most
 alias freq='cut -f1 -d" " ~/.bash_history | sort | uniq -c | sort -nr | head -n 30'
 
+# quick ssh to unc cs server
+alias unc='ssh gerst@login.cs.unc.edu'
+alias unc-tasks=unc 'cat ~/tasks.txt'
+
 if [ -f ~/.bash_aliases ]; then
 	. ~/.bash_aliases
 fi
