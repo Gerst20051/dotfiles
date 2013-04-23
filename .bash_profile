@@ -43,7 +43,7 @@ alias vi="vim"
 alias cp="cp -i"
 alias mv="mv -i"
 alias rm="rm -i"
-alias rd="rm -r"
+alias rd="\rm -r"
 alias mkdir="mkdir -p"
 alias rmdir="rmdir -p"
 
