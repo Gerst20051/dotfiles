@@ -52,7 +52,7 @@ alias mcd 'mkdir \!* && cd \!*'
 alias tm 'ps -ef | grep'
 
 # show which commands you use the most
-alias freq 'cut -f1 -d" " ~/.bash_history | sort | uniq -c | sort -nr | head -n 30'
+alias freq 'cut -f1 -d" " ~/.history | sort | uniq -c | sort -nr | head -n 30'
 
 # perform 'ls' after 'cd' if successful
 alias cd 'cd \!* && ls'

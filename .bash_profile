@@ -51,7 +51,7 @@ alias rmdir="rmdir -p"
 alias path="echo -e ${PATH//:/\\\n}"
 
 # go back x directories
-b() {
+b(){
 	str=""
 	count=0
 	while [ "$count" -lt "$1" ];
@@ -63,9 +63,24 @@ b() {
 }
 
 # make and cd into a directory
-function mcd() {
+function mcd(){
 	mkdir -p "$1" && cd "$1";
 }
+
+# return line numbers of file
+lines(){
+	str=""
+	IFS=','
+	read -a array <<< "$1"
+	for element in "${array[@]}"
+	do
+		str=$str"$element"
+	done
+	sed -n "$str" "$2"
+	unset IFS
+}
+
+alias glines='sed -n "$1" "$2"'
 
 # search for process
 alias tm='ps -ef | grep'
