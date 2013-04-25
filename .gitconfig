@@ -1,0 +1,7 @@
+[user]
+	name = Andrew Gerst
+	email = gerst20051@gmail.com
+
+[core]
+    excludesfile = ~/.gitignore
+
