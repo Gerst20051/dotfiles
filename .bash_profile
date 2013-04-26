@@ -115,6 +115,9 @@ alias grr='git remote rm'
 alias gpu='git pull'
 alias gcl='git clone'
 
+# Misc cURL Utilities
+alias ip='curl whatismyip.org'
+
 # HTTP Aliases
 alias http='curl http://echo.httpkit.com'
 alias http1='http "/path?query=string"'
