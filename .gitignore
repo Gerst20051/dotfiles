@@ -38,5 +38,6 @@ Thumbs.db
 # Config Files #
 ################
 private/
+config.php
 mysql.config.php
 
