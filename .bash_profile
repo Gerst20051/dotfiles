@@ -117,6 +117,7 @@ alias gcl='git clone'
 
 # Misc cURL Utilities
 alias ip='curl whatismyip.org'
+alias text='curl -X POST -d "subject=Hi&message=Works"' http://hns.netai.net/text/ajax.php
 
 # HTTP Aliases
 alias http='curl http://echo.httpkit.com'
