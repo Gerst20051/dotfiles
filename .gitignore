@@ -35,3 +35,7 @@ Thumbs.db
 # *.sql
 # *.sqlite
 
+# Config Files #
+################
+mysql.config.php
+
