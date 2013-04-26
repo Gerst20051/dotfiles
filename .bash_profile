@@ -117,7 +117,7 @@ alias gcl='git clone'
 
 # HTTP Aliases
 alias http='curl http://echo.httpkit.com'
-alias http1='http /path?query=string'
+alias http1='http "/path?query=string"'
 alias http2='http -i'
 
 if [ -f ~/.bash_aliases ]; then
