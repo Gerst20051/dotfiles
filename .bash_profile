@@ -1,13 +1,125 @@
 # Add directories to PATH
 export PATH=$PATH:~/dropbox/bin
 
+# Increase size of bash history
+HISTFILESIZE=5000
+
 # Add colors to terminal
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
 # default ======exfxcxdxbxegedabagacad
 
-# Increase size of bash history
-HISTFILESIZE=2500
+# Turn on grep coloration
+export GREP_OPTIONS='--color=auto'
+export GREP_COLOR='1;32'
+
+# Add to grep: color, line numbers, context of 1 line
+alias grep="grep --color -n -B 1"
+alias grepword="grep -Hnr"
+alias grepfiles="grep -l"
+alias grepnot="grep -v"
+
+# Change prompt
+export PS1="\n\[\e[0;36m\]┌─[\[\e[0m\]\[\e[1;33m\]\u\[\e[0m\]\[\e[1;36m\] @ \[\e[0m\]\[\e[1;33m\]\h\[\e[0m\]\[\e[0;36m\]]─[\[\e[0m\]\[\e[1;34m\]\w\[\e[0m\]\[\e[0;36m\]]\[\e[0;36m\]─[\[\e[0m\]\[\e[0;31m\]\!\[\e[0m\]\[\e[0;36m\]]\[\e[0m\]\n\[\e[0;36m\]└─[\[\e[0m\]\[\e[1;37m\]\$\[\e[0m\]\[\e[0;36m\]]› \[\e[0m\]"
+
+function prompt {
+	# set prompt to mac default
+	export PS1="\h:\W \u\$ "
+	export PS2="> "
+	export PS3=""
+	export PS4="+ "
+}
+
+function prompt1 {
+  local BLUE="\[\033[0;34m\]"
+  local DARK_BLUE="\[\033[1;34m\]"
+  local RED="\[\033[0;31m\]"
+  local DARK_RED="\[\033[1;31m\]"
+  local NO_COLOR="\[\033[0m\]"
+  case $TERM in
+    xterm*|rxvt*)
+      TITLEBAR='\[\033]0;\u@\h:\w\007\]'
+      ;;
+    *)
+      TITLEBAR=""
+      ;;
+  esac
+  PS1="\u@\h [\t]> "
+  PS1="${TITLEBAR}\
+  $BLUE\u@\h $RED[\t]>$NO_COLOR "
+  PS2='continue-> '
+  PS4='$0.$LINENO+ '
+}
+
+function prompt2 {
+	__cwd3(){
+		typeset start=${PWD/${HOME}/\~}
+		typeset delete=${start%/*/*/*}
+		typeset partial=${start#${delete}/}
+		if [[ "${partial}" != /* && "${partial}" != \~* ]]
+		then
+			partial="/.../${partial}"
+		fi
+		echo "${partial}"
+	}
+
+	PS1="\![\h]\$(__cwd3)> "
+}
+
+function prompt3 {
+	export PS1='\u@\h [`httpdcount`]> '
+}
+
+function prompt4 {
+	export PS1='\u@\h \w> '
+}
+
+function prompt5 {
+	export PS1='\d \h $ '
+}
+
+function prompt6 {
+	export PS1='[\d \t \u@\h:\w ] $ '
+}
+
+function prompt7 {
+	# If id command returns zero, you’ve root access.
+	if [ $(id -u) -eq 0 ];
+	then # you are root, set red color prompt
+		PS1="\\[$(tput setaf 1)\\]\\u@\\h:\\w #\\[$(tput sgr0)\\]"
+	else # normal
+		PS1="[\\u@\\h:\\w] $"
+	fi
+}
+
+function prompt8 {
+	PS1="\n\[\e[0;36m\]┌─[\[\e[0m\]\[\e[1;33m\]\u\[\e[0m\]\[\e[1;36m\] @ \[\e[0m\]\[\e[1;33m\]\h\[\e[0m\]\[\e[0;36m\]]─[\[\e[0m\]\[\e[1;34m\]\w\[\e[0m\]\[\e[0;36m\]]\[\e[0;36m\]─[\[\e[0m\]\[\e[0;31m\]\!\[\e[0m\]\[\e[0;36m\]]\[\e[0m\]\n\[\e[0;36m\]└─[\[\e[0m\]\[\e[1;37m\]\$\[\e[0m\]\[\e[0;36m\]]› \[\e[0m\]"
+}
+
+function prompt9 {
+	export PS1="\e[01;33m# \e[01;35m\D{%A %e %B %G %R %Z} \e[00;31m\u\e[01;32m@\e[00;31m\h \e[01;33m\w :\e[00m\n"
+}
+
+function prompt10 {
+	PS1='${PWD/????????????????????????????*/...${PWD:${#PWD}-25}} \e7\e[1;1H\w\e[K\e8'
+}
+
+function prompt11 {
+	PS1='${PWD/????????????????????????????*/...${PWD:${#PWD}-25}} \e7\e[$LINES;1H\w\e[K\e8'
+}
+
+function prompt12 {
+	PS1='\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[33m\]\w\[\e[0m\]\n\$ '
+}
+
+function prompt13 {
+	if [ $(id -u) -eq 0 ];
+	then # you are root
+		PS1="$PWD #"
+	else # normal
+		PS1="$PWD $"
+	fi
+}
 
 # default add color to ls
 # G - colorized output
@@ -28,9 +140,6 @@ alias la="\ls -A"    # Show hidden files
 alias ll="\ls -l"    # List
 alias l.="ls -d .*"  # Only show hidden files
 alias lp="ls -p"     # Show folders
-
-# add to grep: color, line numbers, context of 1 line
-alias grep="grep --color -n -B 1"
 
 # a couple misc/simple commands
 alias c="clear"
@@ -84,6 +193,9 @@ alias glines='sed -n "$1" "$2"'
 
 # search for process
 alias tm='ps -ef | grep'
+alias psx='ps aux'
+alias psr='ps -auroot'
+alias psgerst='ps -augerst'
 
 # show which commands you use the most
 alias freq='cut -f1 -d" " ~/.bash_history | sort | uniq -c | sort -nr | head -n 30'
@@ -119,12 +231,66 @@ alias gcl='git clone'
 
 # Misc cURL Utilities
 alias ip='curl whatismyip.org'
-alias text='curl -X POST -d "subject=Hi&message=Works"' http://hns.netai.net/text/ajax.php
 
 # HTTP Aliases
 alias http='curl http://echo.httpkit.com'
 alias http1='http "/path?query=string"'
 alias http2='http -i'
+
+function httpdcount {
+	ps aux | grep httpd | grep -v grep | wc -l | xargs
+}
+
+function directory_to_titlebar {
+	local pwd_length=42  # The maximum length we want (seems to fit nicely
+						 # in a default length Terminal title bar).
+
+	# Get the current working directory.  We'll format it in $dir.
+	local dir="$PWD"     
+
+	# Substitute a leading path that's in $HOME for "~"
+	if [[ "$HOME" == ${dir:0:${#HOME}} ]] ; then
+		dir="~${dir:${#HOME}}"
+	fi
+	
+	# Append a trailing slash if it's not there already.
+	if [[ ${dir:${#dir}-1} != "/" ]] ; then 
+		dir="$dir/"
+	fi
+
+	# Truncate if we're too long.
+	# We preserve the leading '/' or '~/', and substitute
+	# ellipses for some directories in the middle.
+	if [[ "$dir" =~ (~){0,1}/.*(.{${pwd_length}}) ]] ; then  
+		local tilde=${BASH_REMATCH[1]}
+		local directory=${BASH_REMATCH[2]}
+		
+		# At this point, $directory is the truncated end-section of the 
+		# path.  We will now make it only contain full directory names
+		# (e.g. "ibrary/Mail" -> "/Mail").
+		if [[ "$directory" =~ [^/]*(.*) ]] ; then
+			directory=${BASH_REMATCH[1]} 
+		fi
+		
+		# Can't work out if it's possible to use the Unicode ellipsis,
+		# '…' (Unicode 2026).  Directly embedding it in the string does not
+		# seem to work, and \u escape sequences ('\u2026') are not expanded.
+		#printf -v dir "$tilde/\u2026$s", $directory"
+		dir="$tilde/...$directory"
+	fi
+
+	# Don't embed $dir directly in printf's first argument, because it's 
+	# possible it could contain printf escape sequences.
+	printf "\033]0;%s\007" "$dir"
+}
+
+if [[ "$TERM" == "xterm" || "$TERM" == "xterm-color" ]] ; then
+	export PROMPT_COMMAND="directory_to_titlebar"
+fi
+
+if [ $UID -ne 0 ]; then
+	alias reboot='sudo reboot'
+fi
 
 if [ -f ~/.bash_aliases ]; then
 	. ~/.bash_aliases
