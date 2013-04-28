@@ -19,8 +19,10 @@ set    cyan="%{\033[1;36m%}"
 set   white="%{\033[0;37m%}"
 set     end="%{\033[0m%}"
 
-set prompt="${green}%n${blue}@%m ${white}%~ ${green}%%${end} "
-# set prompt="[${green}%n${blue}@%m ${white}%~ ]${end} "
+# Change prompt
+#set prompt="${green}%n${blue}@%m ${white}%~ ${green}%%${end} "
+alias prompt1 set prompt="${green}%n${blue}@%m ${white}%~ ${green}%%${end} "
+alias prompt2 set prompt="[${green}%n${blue}@%m ${white}%~ ]${end} "
 
 unset red green yellow blue magenta cyan yellow white end
 
