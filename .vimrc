@@ -65,6 +65,15 @@ set showcmd
 set nomodeline
 set cursorline
 
+inoremap <up> <nop>
+vnoremap <up> <nop>
+inoremap <down> <nop>
+vnoremap <down> <nop>
+inoremap <left> <nop>
+vnoremap <left> <nop>
+inoremap <right> <nop>
+vnoremap <right> <nop>
+
 "nnoremap <leader>q :q<CR>
 
 vmap > >gv
