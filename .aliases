@@ -3,7 +3,26 @@ setenv CLICOLOR yes
 setenv LSCOLORS ExGxFxdxCxegedabagExEx
 
 # Increase size of bash history
-set history = 2500
+set history = 5000
+
+# Change prompt
+# export PS1="\n\[\e[0;36m\]┌─[\[\e[0m\]\[\e[1;33m\]\u\[\e[0m\]\[\e[1;36m\] @ \[\e[0m\]\[\e[1;33m\]\h\[\e[0m\]\[\e[0;36m\]]─[\[\e[0m\]\[\e[1;34m\]\w\[\e[0m\]\[\e[0;36m\]]\[\e[0;36m\]─[\[\e[0m\]\[\e[0;31m\]\!\[\e[0m\]\[\e[0;36m\]]\[\e[0m\]\n\[\e[0;36m\]└─[\[\e[0m\]\[\e[1;37m\]\$\[\e[0m\]\[\e[0;36m\]]› \[\e[0m\]"
+
+# Colors!
+set   black="%{\033[1;30m%}"
+set     red="%{\033[1;31m%}"
+set   green="%{\033[0;32m%}"
+set  yellow="%{\033[1;33m%}"
+set    blue="%{\033[1;34m%}"
+set magenta="%{\033[1;35m%}"
+set    cyan="%{\033[1;36m%}"
+set   white="%{\033[0;37m%}"
+set     end="%{\033[0m%}"
+
+set prompt="${green}%n${blue}@%m ${white}%~ ${green}%%${end} "
+set prompt="[${green}%n${blue}@%m ${white}%~ ]${end} "
+
+unset red green yellow blue magenta cyan yellow white end
 
 # default add color to ls
 # G - colorized output
