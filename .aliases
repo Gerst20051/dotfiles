@@ -20,7 +20,8 @@ set   white="%{\033[0;37m%}"
 set     end="%{\033[0m%}"
 
 # Change prompt
-#set prompt="${green}%n${blue}@%m ${white}%~ ${green}%%${end} "
+set prompt="${green}%n${blue}@%m ${white}%~ ${green}%%${end} "
+alias prompt0 set prompt="%m(!)% "
 alias prompt1 set prompt="${green}%n${blue}@%m ${white}%~ ${green}%%${end} "
 alias prompt2 set prompt="[${green}%n${blue}@%m ${white}%~ ]${end} "
 
