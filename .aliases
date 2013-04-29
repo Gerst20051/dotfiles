@@ -1,3 +1,6 @@
+# Add bin to path
+setenv PATH $PATH\:~/bin
+
 # Add colors to terminal
 setenv CLICOLOR yes
 setenv LSCOLORS ExGxFxdxCxegedabagExEx
