@@ -206,7 +206,13 @@ alias unctasks='unc "cat ~/tasks.txt"'
 
 # email using unc cs mailx
 function emailtofunc {
-	unc "emailto $@"	
+	local message=""
+	if [[ -f $3 ]]; then
+		$message=cat $3
+	else
+		$message=$3
+	fi
+	unc "emailto '$1' '$2' '$message'"  
 }
 alias emailto='emailtofunc'
 
@@ -249,7 +255,7 @@ function httpdcount {
 
 function directory_to_titlebar {
 	local pwd_length=42  # The maximum length we want (seems to fit nicely
-						 # in a default length Terminal title bar).
+			     # in a default length Terminal title bar).
 
 	# Get the current working directory.  We'll format it in $dir.
 	local dir="$PWD"     
