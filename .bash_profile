@@ -203,7 +203,12 @@ alias freq='cut -f1 -d" " ~/.bash_history | sort | uniq -c | sort -nr | head -n 
 # quick ssh to unc cs server
 alias unc='ssh gerst@login.cs.unc.edu'
 alias unctasks='unc "cat ~/tasks.txt"'
-alias emailto='unc "emailto"'
+
+# email using unc cs mailx
+function emailtofunc {
+	unc "emailto $@"	
+}
+alias emailto='emailtofunc'
 
 # git aliases
 alias ga='git add'
@@ -223,7 +228,7 @@ alias gma='git commit -am'
 alias gb='git branch'
 # alias gb='git branch \$1'
 alias gc='git checkout'
-alias gco='git checkout \$1'
+# alias gco='git checkout \$1'
 alias gra='git remote add'
 alias grr='git remote rm'
 alias grc='git rm --cached'
