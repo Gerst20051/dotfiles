@@ -2,11 +2,21 @@
 setenv PATH $PATH\:~/bin
 
 # Add colors to terminal
-setenv CLICOLOR yes
+setenv CLICOLOR
 setenv LSCOLORS ExGxFxdxCxegedabagExEx
+
+# Turn on grep colorization
+setenv GREP_OPTIONS --color=auto
+setenv GREP_COLOR 32
 
 # Increase size of bash history
 set history = 5000
+
+# List possible completions
+set autolist
+set color
+set colorcat
+set nobeep
 
 # Change prompt
 # export PS1="\n\[\e[0;36m\]┌─[\[\e[0m\]\[\e[1;33m\]\u\[\e[0m\]\[\e[1;36m\] @ \[\e[0m\]\[\e[1;33m\]\h\[\e[0m\]\[\e[0;36m\]]─[\[\e[0m\]\[\e[1;34m\]\w\[\e[0m\]\[\e[0;36m\]]\[\e[0;36m\]─[\[\e[0m\]\[\e[0;31m\]\!\[\e[0m\]\[\e[0;36m\]]\[\e[0m\]\n\[\e[0;36m\]└─[\[\e[0m\]\[\e[1;37m\]\$\[\e[0m\]\[\e[0;36m\]]› \[\e[0m\]"
@@ -64,7 +74,9 @@ alias vi vim
 alias cp cp -i
 alias mv mv -i
 alias rm rm -i
+alias rd \rm -r
 alias mkdir mkdir -p
+alias rmdir mrdir -p
 
 # prety-print of PATH variable
 

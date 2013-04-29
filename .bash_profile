@@ -189,7 +189,9 @@ lines(){
 	unset IFS
 }
 
-alias glines='sed -n "$1" "$2"'
+function glines {
+	sed -n "$1" "$2"
+}
 
 # search for process
 alias tm='ps -ef | grep'
@@ -201,7 +203,8 @@ alias psgerst='ps -augerst'
 alias freq='cut -f1 -d" " ~/.bash_history | sort | uniq -c | sort -nr | head -n 30'
 
 # quick ssh to unc cs server
-alias unc='ssh gerst@login.cs.unc.edu'
+alias unc='ssh unc'
+alias unc2='ssh unc2'
 alias unctasks='unc "cat ~/tasks.txt"'
 
 function esc {
@@ -219,29 +222,16 @@ function emailtofunc {
 	local message=""
 	local file=$3
 	if [[ -a "$file" ]]; then
-		echo "File Sent: $file"
 		message="`cat $file`"
-		echo $message
-		echo ${message}
+		echo "File Sent: $file"
 		echo "$message"
-		echo "${message}"
-		echo `esc $message`
-		echo `esc "$message"`
-		echo `esc ${message}`
-		echo `esc "${message}"`
-		echo `myesc $message`
-		echo `myesc "$message"`
-		echo `myesc ${message}`
-		echo `myesc "${message}"` # timed out
-		echo "`myesc $message`"
-		echo "`myesc \"$message\"`"
+		scp $file unc":~/email/tmp.txt"
+		unc "emailto '$1' '$2' '$message' 'file'"  
 	else
-		echo "Message Sent"
 		message="$3"
+		echo "Message Sent: $message"
+		unc "emailto '$1' '$2' '$message'"  
 	fi
-	echo "sending"
-	#echo "`myesc \"$message\"`"
-	unc "emailto '$1' '$2' '`myesc $message`'"  
 }
 alias emailto='emailtofunc'
 
@@ -253,17 +243,14 @@ alias gu='git pull'
 alias gp='git push'
 alias gl='git log --pretty=format:"%Cgreen%h %Creset %s %Cblueby %an (%ar) %Cred %d" --graph'
 alias gs='git status'
-alias gh='git show \$1 --color'
+alias gh='git show --color'
 alias gd='git diff --color'
 alias gds='git diff --stat --color'
 alias gdc='git diff --cached --color'
 alias gm='git commit -m'
 alias gma='git commit -am'
-# alias gc='git commit -am \$1'
 alias gb='git branch'
-# alias gb='git branch \$1'
 alias gc='git checkout'
-# alias gco='git checkout \$1'
 alias gra='git remote add'
 alias grr='git remote rm'
 alias grc='git rm --cached'
@@ -286,35 +273,35 @@ function directory_to_titlebar {
 	local pwd_length=42  # The maximum length we want (seems to fit nicely
 			     # in a default length Terminal title bar).
 
-	# Get the current working directory.  We'll format it in $dir.
+	# Get the current working directory. We'll format it in $dir.
 	local dir="$PWD"     
 
 	# Substitute a leading path that's in $HOME for "~"
-	if [[ "$HOME" == ${dir:0:${#HOME}} ]] ; then
+	if [[ "$HOME" == ${dir:0:${#HOME}} ]]; then
 		dir="~${dir:${#HOME}}"
 	fi
 	
 	# Append a trailing slash if it's not there already.
-	if [[ ${dir:${#dir}-1} != "/" ]] ; then 
+	if [[ ${dir:${#dir}-1} != "/" ]]; then 
 		dir="$dir/"
 	fi
 
 	# Truncate if we're too long.
 	# We preserve the leading '/' or '~/', and substitute
 	# ellipses for some directories in the middle.
-	if [[ "$dir" =~ (~){0,1}/.*(.{${pwd_length}}) ]] ; then  
+	if [[ "$dir" =~ (~){0,1}/.*(.{${pwd_length}}) ]]; then  
 		local tilde=${BASH_REMATCH[1]}
 		local directory=${BASH_REMATCH[2]}
 		
 		# At this point, $directory is the truncated end-section of the 
-		# path.  We will now make it only contain full directory names
+		# path. We will now make it only contain full directory names
 		# (e.g. "ibrary/Mail" -> "/Mail").
-		if [[ "$directory" =~ [^/]*(.*) ]] ; then
+		if [[ "$directory" =~ [^/]*(.*) ]]; then
 			directory=${BASH_REMATCH[1]} 
 		fi
 		
 		# Can't work out if it's possible to use the Unicode ellipsis,
-		# '…' (Unicode 2026).  Directly embedding it in the string does not
+		# '…' (Unicode 2026). Directly embedding it in the string does not
 		# seem to work, and \u escape sequences ('\u2026') are not expanded.
 		#printf -v dir "$tilde/\u2026$s", $directory"
 		dir="$tilde/...$directory"
@@ -325,7 +312,7 @@ function directory_to_titlebar {
 	printf "\033]0;%s\007" "$dir"
 }
 
-if [[ "$TERM" == "xterm" || "$TERM" == "xterm-color" ]] ; then
+if [[ "$TERM" == "xterm" || "$TERM" == "xterm-color" ]]; then
 	export PROMPT_COMMAND="directory_to_titlebar"
 fi
 
