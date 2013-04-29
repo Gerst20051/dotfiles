@@ -203,6 +203,7 @@ alias freq='cut -f1 -d" " ~/.bash_history | sort | uniq -c | sort -nr | head -n 
 # quick ssh to unc cs server
 alias unc='ssh gerst@login.cs.unc.edu'
 alias unctasks='unc "cat ~/tasks.txt"'
+alias emailto='unc "emailto"'
 
 # git aliases
 alias ga='git add'
