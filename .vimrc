@@ -40,7 +40,7 @@ set cmdheight=2
 set hidden
 set history=1000
 set undolevels=1000
-set mat=2
+"set mat=2
 "set gcr=n:blinkon0
 "set gcr=a:blinkon0
 "set so=7
@@ -54,7 +54,7 @@ set nobackup
 set nowb
 set noswapfile
 set directory=~/.vim/.tmp,~/tmp,/tmp
-set viminfo='20,\"80
+set viminfo='220,\"100,:20,%,n~/.viminfo
 set wildmenu
 set wildmode=list:full
 set wildignore=*.swp,*.bak,*.pyc,*.class
