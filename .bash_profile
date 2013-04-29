@@ -204,15 +204,44 @@ alias freq='cut -f1 -d" " ~/.bash_history | sort | uniq -c | sort -nr | head -n 
 alias unc='ssh gerst@login.cs.unc.edu'
 alias unctasks='unc "cat ~/tasks.txt"'
 
+function esc {
+	local escaped="'\''"
+	echo "${1//\'/$escaped}"
+}
+
+function myesc {
+	local escaped="\'"
+	echo "${1//\'/$escaped}"
+}
+
 # email using unc cs mailx
 function emailtofunc {
 	local message=""
-	if [[ -f $3 ]]; then
-		$message=cat $3
+	local file=$3
+	if [[ -a "$file" ]]; then
+		echo "File Sent: $file"
+		message="`cat $file`"
+		echo $message
+		echo ${message}
+		echo "$message"
+		echo "${message}"
+		echo `esc $message`
+		echo `esc "$message"`
+		echo `esc ${message}`
+		echo `esc "${message}"`
+		echo `myesc $message`
+		echo `myesc "$message"`
+		echo `myesc ${message}`
+		echo `myesc "${message}"` # timed out
+		echo "`myesc $message`"
+		echo "`myesc \"$message\"`"
 	else
-		$message=$3
+		echo "Message Sent"
+		message="$3"
 	fi
-	unc "emailto '$1' '$2' '$message'"  
+	echo "sending"
+	#echo "`myesc \"$message\"`"
+	unc "emailto '$1' '$2' '`myesc $message`'"  
 }
 alias emailto='emailtofunc'
 
