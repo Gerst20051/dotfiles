@@ -269,6 +269,10 @@ function httpdcount {
 	ps aux | grep httpd | grep -v grep | wc -l | xargs
 }
 
+# CD Aliases
+alias cdphil='cd ~/dropbox/school/phil 160/'
+alias cdphilnotes='cdphil "notes/"'
+
 function directory_to_titlebar {
 	local pwd_length=42  # The maximum length we want (seems to fit nicely
 			     # in a default length Terminal title bar).
