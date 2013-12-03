@@ -257,6 +257,9 @@ alias grc='git rm --cached'
 alias gpu='git pull'
 alias gcl='git clone'
 
+# XAMPP Aliases
+alias xampp='sudo /applications/xampp/xamppfiles/xampp'
+
 # Misc cURL Utilities
 alias ip='curl whatismyip.org'
 
@@ -272,6 +275,12 @@ function httpdcount {
 # CD Aliases
 alias cdphil='cd ~/dropbox/school/phil 160'
 alias cdphilnotes='cd ~/dropbox/school/phil 160/notes'
+alias cdgit='cd ~/Web/Git'
+alias cddot='cd ~/Web/Git/dotfiles'
+alias cdhack='cd ~/Web/Git/Hackathons'
+alias cdwave='cd ~/Web/Git/HnS-Wave/src'
+alias chnetai='cd ~/Web/Git/HnS-Netai/src'
+alias cdjs='cd ~/Web/Git/JavaScript'
 
 function directory_to_titlebar {
 	local pwd_length=42  # The maximum length we want (seems to fit nicely
