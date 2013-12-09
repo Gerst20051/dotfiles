@@ -279,7 +279,7 @@ alias cdgit='cd ~/Web/Git'
 alias cddot='cd ~/Web/Git/dotfiles'
 alias cdhack='cd ~/Web/Git/Hackathons'
 alias cdwave='cd ~/Web/Git/HnS-Wave/src'
-alias chnetai='cd ~/Web/Git/HnS-Netai/src'
+alias cdnetai='cd ~/Web/Git/HnS-Netai/src'
 alias cdjs='cd ~/Web/Git/JavaScript'
 
 function directory_to_titlebar {
