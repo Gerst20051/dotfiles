@@ -2,7 +2,7 @@
 export PATH=$PATH:~/dropbox/bin
 
 # Increase size of bash history
-HISTFILESIZE=5000
+HISTFILESIZE=10000
 
 # Add colors to terminal
 export CLICOLOR=1
