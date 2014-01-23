@@ -1,0 +1,125 @@
+# PassportParking Aliases
+
+# Grep Current Directory for Phrase
+function f {
+	grep -r "$1" *
+}
+
+function flog {
+	glp | grep "$1"
+}
+
+function newbug {
+	if [ "$#" -ne 1 ]; then
+		echo "1 argument required, $# provided"
+		return
+	fi
+	echo $1 | grep -E -q '^[0-9]+$'
+	if [ $? -ne 0 ]; then
+		echo "Numeric argument required, $1 provided"
+		return
+	fi
+	git checkout production &&
+	git pull origin production &&
+	git checkout -b bug_"$1"
+}
+
+function syncbug {
+	if [ "$#" -ne 1 ]; then
+		echo "1 argument required, $# provided"
+		return
+	fi
+	echo $1 | grep -E -q '^[0-9]+$'
+	if [ $? -ne 0 ]; then
+		echo "Numeric argument required, $1 provided"
+		return
+	fi
+	git checkout production &&
+	git pull origin production &&
+	git checkout bug_"$1" &&
+	git merge --no-ff production
+}
+
+function mergebug {
+	if [ "$#" -ne 1 ]; then
+		echo "1 argument required, $# provided"
+		return
+	fi
+	echo $1 | grep -E -q '^[0-9]+$'
+	if [ $? -ne 0 ]; then
+		echo "Numeric argument required, $1 provided"
+		return
+	fi
+	git checkout bug_"$1" &&
+	git commit -m "updated bug_$1"
+}
+
+function mergeall {
+	if [ "$#" -ne 1 ]; then
+		echo "1 argument required, $# provided"
+		return
+	fi
+	echo $1 | grep -E -q '^[0-9]+$'
+	if [ $? -ne 0 ]; then
+		echo "Numeric argument required, $1 provided"
+		return
+	fi
+        mergedev "$@" &&
+        mergestag "$@" &&
+        mergeprod "$@"
+}
+
+function mergedev {
+	if [ "$#" -ne 1 ]; then
+		echo "1 argument required, $# provided"
+		return
+	fi
+	echo $1 | grep -E -q '^[0-9]+$'
+	if [ $? -ne 0 ]; then
+		echo "Numeric argument required, $1 provided"
+		return
+	fi
+	git checkout bug_"$1" &&
+	git checkout development &&
+	git pull origin development &&
+	git merge --no-ff -m "Merge branch 'bug_$1' into development" bug_"$1" &&
+        git push origin development &&
+        git checkout bug_"$1"
+}
+
+function mergestag {
+	if [ "$#" -ne 1 ]; then
+		echo "1 argument required, $# provided"
+		return
+	fi
+	echo $1 | grep -E -q '^[0-9]+$'
+	if [ $? -ne 0 ]; then
+		echo "Numeric argument required, $1 provided"
+		return
+	fi 
+	git checkout bug_"$1" &&
+	git checkout staging &&
+	git pull origin staging &&
+	git merge --no-ff -m "Merge branch 'bug_$1' into staging" bug_"$1" &&
+        git push origin staging &&
+        git checkout bug_"$1"
+}
+
+function mergeprod {
+	if [ "$#" -ne 1 ]; then
+		echo "1 argument required, $# provided"
+		return
+	fi
+	echo $1 | grep -E -q '^[0-9]+$'
+	if [ $? -ne 0 ]; then
+		echo "Numeric argument required, $1 provided"
+		return
+	fi 
+	git checkout bug_"$1" &&
+	git checkout production &&
+	git pull origin production &&
+	git merge --no-ff -m "Merge branch 'bug_$1' into staging" bug_"$1" &&
+        git push origin production &&
+        git checkout bug_"$1"
+}
+

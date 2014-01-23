@@ -337,6 +337,10 @@ if [ -f ~/.bash_aliases ]; then
 	. ~/.bash_aliases
 fi
 
+if [ -f ~/.bash_passportparking ]; then
+	. ~/.bash_passportparking
+fi
+
 if [ -f ~/.bashrc ]; then
 	. ~/.bashrc
 fi
