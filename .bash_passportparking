@@ -37,7 +37,23 @@ function syncbug {
 	git checkout production &&
 	git pull origin production &&
 	git checkout bug_"$1" &&
-	git merge --no-ff production
+	git merge --no-ff -m "Merge branch production into 'bug_$1'" production
+}
+
+function syncbugstag {
+	if [ "$#" -ne 1 ]; then
+		echo "1 argument required, $# provided"
+		return
+	fi
+	echo $1 | grep -E -q '^[0-9]+$'
+	if [ $? -ne 0 ]; then
+		echo "Numeric argument required, $1 provided"
+		return
+	fi
+	git checkout staging &&
+	git pull origin staging &&
+	git checkout bug_"$1" &&
+	git merge --no-ff -m "Merge branch staging into 'bug_$1'" staging
 }
 
 function mergebug {
@@ -118,7 +134,7 @@ function mergeprod {
 	git checkout bug_"$1" &&
 	git checkout production &&
 	git pull origin production &&
-	git merge --no-ff -m "Merge branch 'bug_$1' into staging" bug_"$1" &&
+	git merge --no-ff -m "Merge branch 'bug_$1' into production" bug_"$1" &&
         git push origin production &&
         git checkout bug_"$1"
 }
