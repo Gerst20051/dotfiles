@@ -162,7 +162,6 @@ function syncrepos {
         repos=('custom' 'mobile')
         echo $'\n\E[35m'
         echo "Syncing Repos: ${repos[@]}"
-        echo $'\n'
         sleep 2
         for repo in "${repos[@]}"; do
 		echo $'\n\E[31m'
@@ -173,7 +172,9 @@ function syncrepos {
 		message+="' Branches"
 		message+=$'\E[37m'
 		function="syncbranches"
-		if [[ $repo == "ppconfig" ]]; then
+		if [[
+			$repo == "ppconfig"
+		]]; then
 			function="syncmasterbranch"
 		fi
 		\cd ~/PP/Code/$repo &&
