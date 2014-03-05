@@ -145,11 +145,11 @@ function syncbranches {
 	git checkout development &&
 	git pull origin development
 	echo $'\n'
-	git checkout staging &&
-	git pull origin staging
-	echo $'\n'
 	git checkout production &&
 	git pull origin production
+	echo $'\n'
+	git checkout staging &&
+	git pull origin staging
 }
 
 function syncmasterbranch {
