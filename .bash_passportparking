@@ -162,7 +162,10 @@ function syncmasterbranch {
 function syncrepos {
         pwd=${PWD}
         remote="origin"
-        repos=('custom' 'mobile')
+        repos=(
+        	'custom'
+        	'mobile'
+        )
         echo $'\n\E[35m'
         echo "Syncing Repos: ${repos[@]}"
         sleep 2
