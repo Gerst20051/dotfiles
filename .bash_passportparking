@@ -140,19 +140,22 @@ function mergeprod {
 }
 
 function syncbranches {
-	echo $'\E[31m'
-	git fetch &&
-	git checkout development && echo $'\n\n' &&
-	git pull origin development &&
-	git checkout staging && echo $'\n\n' &&
-	git pull origin staging &&
-	git checkout production && echo $'\n\n' &&
+	git fetch
+	echo $'\n'
+	git checkout development &&
+	git pull origin development
+	echo $'\n'
+	git checkout staging &&
+	git pull origin staging
+	echo $'\n'
+	git checkout production &&
 	git pull origin production
 }
 
 function syncmasterbranch {
-	git fetch &&
-	git checkout master && echo $'\n\n' &&
+	git fetch
+	echo $'\n'
+	git checkout master &&
 	git pull origin master
 }
 
@@ -173,10 +176,24 @@ function syncrepos {
 		message+=$'\E[37m'
 		function="syncbranches"
 		if [[
-			$repo == "ppconfig"
+			$repo == "centralpay" ||
+			$repo == "centralpaydevice" ||
+			$repo == "db" ||
+			$repo == "initscripts" ||
+			$repo == "kegerator" ||
+			$repo == "migration" ||
+			$repo == "mobileapp" ||
+			$repo == "operator" ||
+			$repo == "ppconfig" ||
+			$repo == "produpdate" ||
+			$repo == "reservations" ||
+			$repo == "sandbox" ||
+			$repo == "test" ||
+			$repo == "testing"
 		]]; then
 			function="syncmasterbranch"
 		fi
+		echo $repo
 		\cd ~/PP/Code/$repo &&
 	        ${function}
                 sleep 2
