@@ -140,6 +140,7 @@ function mergeprod {
 }
 
 function syncbranches {
+	echo $'\E[31m'
 	git fetch &&
 	git checkout development && echo $'\n\n' &&
 	git pull origin development &&
@@ -159,12 +160,17 @@ function syncrepos {
         pwd=${PWD}
         remote="origin"
         repos=('custom' 'mobile')
-        echo $'\n\n\E[35m'
-        echo "Syncing Repos: ${cdrepolist[@]}"
-        sleep 1
+        echo $'\n\E[35m'
+        echo "Syncing Repos: ${repos[@]}"
+        echo $'\n'
+        sleep 2
         for repo in "${repos[@]}"; do
 		echo $'\n\E[31m'
-		message="Syncing Repo '$repo' Branches"
+		message="Syncing Repo '"
+		message+=$'\E[36m'
+		message+=$repo
+		message+=$'\E[31m'
+		message+="' Branches"
 		message+=$'\E[37m'
 		function="syncbranches"
 		if [[ $repo == "ppconfig" ]]; then
@@ -172,7 +178,7 @@ function syncrepos {
 		fi
 		\cd ~/PP/Code/$repo &&
 	        ${function}
-                sleep 1
+                sleep 2
         done
         echo $'\n\n\E[31m'
         message="Finished Syncing All Repo Branches! Current Directory: "
