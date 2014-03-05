@@ -149,8 +149,38 @@ function syncbranches {
 	git pull origin production
 }
 
+function syncmasterbranch {
+	git fetch &&
+	git checkout master &&
+	git pull origin master
+}
+
 function syncrepos {
-	sync branches
+        pwd=${PWD}
+        remote="origin"
+        repos=('custom' 'mobile')
+        echo $'\n\n\E[35m'
+        echo "Syncing Repos: ${cdrepolist[@]}"
+        sleep 1
+        for repo in "${repos[@]}"; do
+		message=$'\n\E[31m'
+		message+="Syncing Repo '$repo' Branches"
+		message+=$'\E[37m'
+		function="syncbranches"
+		if [[ $repo == "ppconfig" ]]; then
+			function="syncmasterbranch"
+		fi
+		\cd ~/PP/Code/$repo &&
+	        ${function}
+                sleep 1
+        done
+        message=$'\n\n\E[31m'
+        message+="Finished Syncing All Repo Branches! Current Directory: "
+        message+=$'\E[33m'
+        message+="${pwd}"
+        message+=$'\E[37m'
+        echo $message && echo $'\n' &&
+        cd ${pwd}
 }
 
 alias lsyncdcustom="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repocustom.lua'"
