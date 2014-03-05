@@ -1,5 +1,5 @@
 # Add directories to PATH
-export PATH=/opt/local/bin:/opt/local/sbin:~/dropbox/bin:$PATH
+export PATH=/opt/local/bin:/opt/local/sbin:~/dropbox/bin:~/bin:$PATH
 
 # Increase size of bash history
 HISTFILESIZE=10000
