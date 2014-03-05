@@ -94,3 +94,4 @@ alias freq 'cut -f1 -d" " ~/.history | sort | uniq -c | sort -nr | head -n 30'
 
 # perform 'ls' after 'cd' if successful
 alias cd 'cd \!* && ls'
+

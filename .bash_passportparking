@@ -139,3 +139,32 @@ function mergeprod {
         git checkout bug_"$1"
 }
 
+function syncbranches {
+	git fetch &&
+	git checkout development &&
+	git pull origin development &&
+	git checkout staging &&
+	git pull origin staging &&
+	git checkout production &&
+	git pull origin production
+}
+
+function syncrepos {
+	sync branches
+}
+
+alias lsyncdcustom="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repocustom.lua'"
+alias lsyncddp2="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repodelayedproc2.lua'"
+alias lsyncdmpw="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repomobilepayweb.lua'"
+alias lsyncdmobile="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repomobile.lua'"
+alias lsyncdnot="sudo lsyncd '/Users/passport/lsyncd/ppconfig/reponotifications.lua'"
+alias lsyncdopmgmt="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repoopmgmt.lua'"
+alias lsyncdpm="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repoparkmonitor.lua'"
+alias lsyncdpg="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repopaymentgateway.lua'"
+alias lsyncdppc="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repoppconfig.lua'"
+alias lsyncdrate="sudo lsyncd '/Users/passport/lsyncd/ppconfig/reporate.lua'"
+alias lsyncdshared="sudo lsyncd '/Users/passport/lsyncd/ppconfig/reposhared.lua'"
+alias lsyncdstrings="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repostrings.lua'"
+alias lsyncdvalidation="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repovalidation.lua'"
+alias lsyncdviolations="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repoviolations.lua'"
+
