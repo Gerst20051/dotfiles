@@ -1,0 +1,151 @@
+
+# Start agent
+SSH_ENV=$HOME/.ssh/environment
+
+function start_agent {
+	echo "Initializing new SSH agent..."
+	/usr/bin/ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
+	echo Succeeded
+	chmod 600 "${SSH_ENV}"
+	. "${SSH_ENV}" > /dev/null
+	/usr/bin/ssh-add ~/.ssh/ids/myeasyp.com/ppdevelopment/dev_rsa
+}
+
+if [ -f "${SSH_ENV}" ]; then
+	. "${SSH_ENV}" > /dev/null
+	ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
+		start_agent;
+	}
+else
+	start_agent;
+fi
+
+# Change prompt
+export PS1="\n\[\e[0;36m\]┌─[\[\e[0m\]\[\e[1;33m\]\u\[\e[0m\]\[\e[1;36m\] @ \[\e[0m\]\[\e[1;33m\]\h\[\e[0m\]\[\e[0;36m\]]─[\[\e[0m\]\[\e[1;34m\]\w\[\e[0m\]\[\e[0;36m\]]\[\e[0;36m\]─[\[\e[0m\]\[\e[0;31m\]\!\[\e[0m\]\[\e[0;36m\]]\[\e[0m\]\n\[\e[0;36m\]└─[\[\e[0m\]\[\e[1;37m\]\$\[\e[0m\]\[\e[0;36m\]]› \[\e[0m\]"
+
+# Increase size of bash history
+HISTFILESIZE=10000
+
+# Add colors to terminal
+export CLICOLOR=1
+export LSCOLOR=GxFxCxDxBxegedabagaced
+
+# Turn on grep coloration
+export GREP_OPTIONS="--color=auto"
+export GREP_COLOR="1;32"
+
+# Add to grep: color, line numbers, context of 1 line
+alias grep="grep --color -n -B 1"
+
+# Fix LS
+alias ls="ls -GFalh --color"
+alias sl="ls"
+
+# Make and CD into a directory
+function mcd {
+	mkdir -p "$1" && cd "$1"
+}
+
+# Show directory list after changing directory
+function cdls {
+        builtin cd "$*"
+        RESULT=$?
+        if [ "$RESULT" -eq 0 ]; then
+                ls
+        fi
+}
+
+alias cd="cdls"
+alias ..="cd .."
+
+function whichh {
+        echo "VirtualBox Local Server"
+}
+
+function f {
+        grep -r "$1" *
+}
+
+function fslog {
+        tailf /var/log/syslog | grep "$1"
+}
+
+function fshlog {
+        cat /var/log/syslog | grep "$1"
+}
+
+# CD Aliases
+alias cdcustom="cd ~/workspace/custom"
+alias cddp2="cd ~/workspace/delayedproc2"
+alias cdmpw="cd ~/workspace/mobilepayweb"
+alias cdmobile="cd ~/workspace/mobile"
+alias cdpm="cd ~/workspace/parkmonitor"
+alias cdpg="cd ~/workspace/paymentgateway"
+alias cdppc="cd ~/workspace/ppconfig"
+alias cdrate="cd ~/workspace/rate"
+alias cdshared="cd ~/workspace/shared"
+alias cdstrings="cd ~/workspace/strings"
+alias cdval="cd ~/workspace/validation"
+alias cdvio="cd ~/workspace/violations"
+alias cdnot="cd ~/workspace/server/notifications"
+alias cdserver="cd ~/workspace/server/opmgmt"
+
+# Git Aliases
+alias pullstag="git checkout staging && git pull dev staging"
+alias pullmaster="git checkout master && git pull dev master"
+alias ga="git add"
+alias ga.="git add ."
+alias gaa="git add -A"
+alias gl="git log --color --pretty=format:'%Cgreen%h %Creset %s %Cblueby %an (%ar) %Cred %d' --graph"
+alias glp="git log -p --color --pretty=format:'%Cgreen%h %Creset %s %Cblueby %an (%ar) %Cred %d' --graph"
+alias gsl="git shortlog -sne"
+alias gs="git status"
+alias gd="git diff --color"
+alias gdc="git diff --cached --color"
+alias gm="git commit -m"
+alias gma="git commit -am"
+alias gb="git branch"
+alias gc="git checkout"
+
+function syncrepos {
+	start_agent
+	pwd=${PWD}
+	remote="dev"
+	declare -a cdrepolist=('custom' 'delayedproc2' 'mobile' 'mobilepayweb' 'parkmonitor' 'paymentgateway' 'ppconfig' 'rate' 'shared' 'strings' 'validation' 'violations' 'server/notifications' 'server/opmgmt')
+	rLen=${#cdrepolist[@]}
+	echo $'\n\n\E[35m'
+	echo "Syncing Repos: ${cdrepolist[@]}"
+	sleep 1	
+	for (( i=0; i<${rLen}; i++ ));
+	do
+		branch="staging"
+		if [[ "${cdrepolist[$i]}" == "ppconfig" ]]; then
+			branch="master"
+		fi
+		echo $'\n\E[31m'
+		message=$'Syncing Repo: '
+		message+="'${cdrepolist[$i]}'"
+		message+=$'\E[37m'
+		echo $message && echo $'\n' &&
+		\cd ~/workspace/${cdrepolist[$i]} &&
+		git stash &&
+		git checkout . &&
+		git clean -fd &&
+		git checkout ${branch} &&
+		git pull ${remote} ${branch}
+		sleep 1
+	done
+	echo $'\n\n\E[31m'
+	message=$'Finished Syncing Repos! Current Directory: '
+	message+=$'\E[33m'
+	message+="${pwd}"
+	message+=$'\E[37m'
+	echo $message && echo $'\n' &&
+	cd ${pwd}
+}
+
+# Other Aliases
+
+alias log="sudo tailf /var/log/syslog | grep -v 'PAYMENTGATEWAY\|PP_RATE\|PP_BILLING\|PP_CONV_FEE\|RATECALC\|PP_ANALYTICS\|PP_AUTHENTICATION\|TROLIO\|CARDSTORE\|curl output'"
+
+
