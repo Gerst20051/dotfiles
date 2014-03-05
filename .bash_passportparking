@@ -141,17 +141,17 @@ function mergeprod {
 
 function syncbranches {
 	git fetch &&
-	git checkout development &&
+	git checkout development && echo $'\n\n' &&
 	git pull origin development &&
-	git checkout staging &&
+	git checkout staging && echo $'\n\n' &&
 	git pull origin staging &&
-	git checkout production &&
+	git checkout production && echo $'\n\n' &&
 	git pull origin production
 }
 
 function syncmasterbranch {
 	git fetch &&
-	git checkout master &&
+	git checkout master && echo $'\n\n' &&
 	git pull origin master
 }
 
@@ -163,8 +163,8 @@ function syncrepos {
         echo "Syncing Repos: ${cdrepolist[@]}"
         sleep 1
         for repo in "${repos[@]}"; do
-		message=$'\n\E[31m'
-		message+="Syncing Repo '$repo' Branches"
+		echo $'\n\E[31m'
+		message="Syncing Repo '$repo' Branches"
 		message+=$'\E[37m'
 		function="syncbranches"
 		if [[ $repo == "ppconfig" ]]; then
@@ -174,8 +174,8 @@ function syncrepos {
 	        ${function}
                 sleep 1
         done
-        message=$'\n\n\E[31m'
-        message+="Finished Syncing All Repo Branches! Current Directory: "
+        echo $'\n\n\E[31m'
+        message="Finished Syncing All Repo Branches! Current Directory: "
         message+=$'\E[33m'
         message+="${pwd}"
         message+=$'\E[37m'
