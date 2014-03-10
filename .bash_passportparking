@@ -294,7 +294,7 @@ function kill_tunnels {
 	echo "Killing Tunnels: ${ports[@]}"
 	echo $'\E[37m'
 	for port in "${ports[@]}"; do
-		pid=$(pgrep -f $port)
+		pid=$(pgrep -f $port":localhost")
 		if [[ "$pid" -gt 0 ]]; then
 			kill $pid
 			message=$'\E[35m'
