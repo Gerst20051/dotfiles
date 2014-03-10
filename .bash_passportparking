@@ -5,10 +5,12 @@ function f {
 	grep -r "$1" *
 }
 
+# Grep Git Log History for Phrase
 function flog {
 	glp | grep "$1"
 }
 
+# Checkout Bug Branch From Production Branch
 function newbug {
 	if [ "$#" -ne 1 ]; then
 		echo "1 argument required, $# provided"
@@ -24,6 +26,7 @@ function newbug {
 	git checkout -b bug_"$1"
 }
 
+# Sync Bug Branch With Production Branch
 function syncbug {
 	if [ "$#" -ne 1 ]; then
 		echo "1 argument required, $# provided"
@@ -40,6 +43,7 @@ function syncbug {
 	git merge --no-ff -m "Merge branch production into 'bug_$1'" production
 }
 
+# Sync Bug Branch With Staging Branch
 function syncbugstag {
 	if [ "$#" -ne 1 ]; then
 		echo "1 argument required, $# provided"
@@ -56,6 +60,7 @@ function syncbugstag {
 	git merge --no-ff -m "Merge branch staging into 'bug_$1'" staging
 }
 
+# Commit Bug Branch Changes
 function mergebug {
 	if [ "$#" -ne 1 ]; then
 		echo "1 argument required, $# provided"
@@ -70,6 +75,7 @@ function mergebug {
 	git commit -m "updated bug_$1"
 }
 
+# Merge Bug Branch Commits Into Dev, Stag, and Prod Branches
 function mergeall {
 	if [ "$#" -ne 1 ]; then
 		echo "1 argument required, $# provided"
@@ -85,6 +91,7 @@ function mergeall {
         mergeprod "$@"
 }
 
+# Merge Bug Branch Commits Into Development Branch
 function mergedev {
 	if [ "$#" -ne 1 ]; then
 		echo "1 argument required, $# provided"
@@ -103,6 +110,7 @@ function mergedev {
         git checkout bug_"$1"
 }
 
+# Merge Bug Branch Commits Into Staging Branch
 function mergestag {
 	if [ "$#" -ne 1 ]; then
 		echo "1 argument required, $# provided"
@@ -121,6 +129,7 @@ function mergestag {
         git checkout bug_"$1"
 }
 
+# Merge Bug Branch Commits Into Production Branch
 function mergeprod {
 	if [ "$#" -ne 1 ]; then
 		echo "1 argument required, $# provided"
@@ -139,6 +148,7 @@ function mergeprod {
         git checkout bug_"$1"
 }
 
+# Sync Dev, Stag, and Prod Branches With Remote Branches
 function syncbranches {
 	git fetch
 	echo $'\n'
@@ -152,6 +162,7 @@ function syncbranches {
 	git pull origin staging
 }
 
+# Sync Master Branch With Remote
 function syncmasterbranch {
 	git fetch
 	echo $'\n'
@@ -159,6 +170,7 @@ function syncmasterbranch {
 	git pull origin master
 }
 
+# Sync Dev, Stag, and Prod Branches For All Repos
 function syncrepos {
         pwd=${PWD}
         remote="origin"
@@ -246,6 +258,7 @@ function syncrepos {
         cd ${pwd}
 }
 
+# Lsyncd Aliases (VirtualBox Server Syncing)
 alias lsyncdcustom="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repocustom.lua'"
 alias lsyncddp2="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repodelayedproc2.lua'"
 alias lsyncdmpw="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repomobilepayweb.lua'"
@@ -260,4 +273,50 @@ alias lsyncdshared="sudo lsyncd '/Users/passport/lsyncd/ppconfig/reposhared.lua'
 alias lsyncdstrings="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repostrings.lua'"
 alias lsyncdvalidation="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repovalidation.lua'"
 alias lsyncdviolations="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repoviolations.lua'"
+
+# Start SSH Tunnels
+function start_tunnels {
+	kill_tunnels
+	echo $'\E[36m'
+	echo "Starting Tunnels"
+	ssh -f -L 8080:localhost:80 ppinfo -N
+	ssh -f -L 8181:localhost:80 easypparking -N
+	ssh -f -L 8282:localhost:80 myeasyp -N
+	ssh -f -L 8383:localhost:8080 myeasyp -N
+	echo $'\E[33m'
+	echo "All Tunnels Have Been Started!"
+}
+
+# Kill SSH Tunnels
+function kill_tunnels {
+	ports=('8080' '8181' '8282' '8383')
+	echo $'\E[31m'
+	echo "Killing Tunnels: ${ports[@]}"
+	echo $'\E[37m'
+	for port in "${ports[@]}"; do
+		pid=$(pgrep -f $port)
+		if [[ "$pid" -gt 0 ]]; then
+			kill $pid
+			message=$'\E[35m'
+			message+="Killed Tunnel With Port: '"
+			message+=$'\E[36m'
+			message+=$port
+			message+=$'\E[35m'
+			message+="' and PID: '"
+			message+=$'\E[36m'
+			message+=$pid
+			message+=$'\E[35m'
+			message+="'"
+			message+=$'\E[37m'
+			echo $message
+		fi
+	done
+	echo $'\E[33m'
+	echo "All Tunnels Have Been Killed!"
+}
+
+# Find Tunnel Process
+function find_tunnel {
+	ps aux | grep ssh | grep "$1"
+}
 
