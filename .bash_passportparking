@@ -178,7 +178,6 @@ function syncrepos {
 		'centralpay'
 		'centralpaydevice'
 		'custom'
-		'db'
 		'delayedproc'
 		'delayedproc2'
 		'initscripts'
@@ -195,13 +194,9 @@ function syncrepos {
 		'parker'
 		'parkerv2'
 		'parkmonitor'
-		'passportapp'
 		'passportwebsite'
 		'paymentgateway'
 		'ppconfig'
-		'ppfs'
-		'ppinternal'
-		'ppmobilepay'
 		'produpdate'
 		'rate'
 		'reservations'
@@ -230,7 +225,6 @@ function syncrepos {
 		if [[
 			$repo == "centralpay" ||
 			$repo == "centralpaydevice" ||
-			$repo == "db" ||
 			$repo == "initscripts" ||
 			$repo == "kegerator" ||
 			$repo == "migration" ||
