@@ -60,6 +60,16 @@ function syncbugstag {
 	git merge --no-ff -m "Merge branch staging into 'bug_$1'" staging
 }
 
+# Sync Staging Branch With Production Branch
+function syncstagwithprod {
+	git checkout production &&
+	git pull origin production &&
+	git checkout staging &&
+	git pull origin staging &&
+	git merge --no-ff -m "Syncing staging branch with production branch" production &&
+	git push origin staging
+}
+
 # Commit Bug Branch Changes
 function mergebug {
 	if [ "$#" -ne 1 ]; then
@@ -75,7 +85,7 @@ function mergebug {
 	git commit -m "updated bug_$1"
 }
 
-# Merge Bug Branch Commits Into Dev, Stag, and Prod Branches
+# Merge Bug Branch Commits Into Stag and Prod Branches
 function mergeall {
 	if [ "$#" -ne 1 ]; then
 		echo "1 argument required, $# provided"
@@ -86,28 +96,8 @@ function mergeall {
 		echo "Numeric argument required, $1 provided"
 		return
 	fi
-        mergedev "$@" &&
         mergestag "$@" &&
         mergeprod "$@"
-}
-
-# Merge Bug Branch Commits Into Development Branch
-function mergedev {
-	if [ "$#" -ne 1 ]; then
-		echo "1 argument required, $# provided"
-		return
-	fi
-	echo $1 | grep -E -q '^[0-9]+$'
-	if [ $? -ne 0 ]; then
-		echo "Numeric argument required, $1 provided"
-		return
-	fi
-	git checkout bug_"$1" &&
-	git checkout development &&
-	git pull origin development &&
-	git merge --no-ff -m "Merge branch 'bug_$1' into development" bug_"$1" &&
-        git push origin development &&
-        git checkout bug_"$1"
 }
 
 # Merge Bug Branch Commits Into Staging Branch
@@ -148,12 +138,9 @@ function mergeprod {
         git checkout bug_"$1"
 }
 
-# Sync Dev, Stag, and Prod Branches With Remote Branches
+# Sync Stag and Prod Branches With Remote Branches
 function syncbranches {
 	git fetch
-	echo $'\n'
-	git checkout development &&
-	git pull origin development
 	echo $'\n'
 	git checkout production &&
 	git pull origin production
@@ -162,7 +149,7 @@ function syncbranches {
 	git pull origin staging
 }
 
-# Sync Master Branch With Remote
+# Sync Master Branch With Remote Branch
 function syncmasterbranch {
 	git fetch
 	echo $'\n'
@@ -170,7 +157,56 @@ function syncmasterbranch {
 	git pull origin master
 }
 
-# Sync Dev, Stag, and Prod Branches For All Repos
+# Sync Staging Branch With Production Branch For All Repos
+function syncstagrepos {
+        pwd=${PWD}
+        remote="origin"
+        repos=(
+		'custom'
+		'delayedproc'
+		'delayedproc2'
+		'mobile'
+		'mobilepayweb'
+		'mobilepaywin'
+		'notifications'
+		'opmgmt'
+		'parkenforcer'
+		'parkmonitor'
+		'passportwebsite'
+		'paymentgateway'
+		'rate'
+		'shared'
+		'strings'
+		'tlotest'
+		'validation'
+		'violations'
+	)
+	echo $'\n\E[35m'
+        echo "Syncing Staging With Production For Repos: ${repos[@]}"
+        sleep 2
+        for repo in "${repos[@]}"; do
+		echo $'\n\E[31m'
+		message="Syncing Staging With Production For Repo '"
+		message+=$'\E[36m'
+		message+=$repo
+		message+=$'\E[31m'
+		message+="'"
+		message+=$'\E[37m'
+		echo $message
+		\cd ~/PP/Code/$repo &&
+	        syncstagwithprod
+                sleep 2
+        done
+        echo $'\n\n\E[31m'
+        message="Finished Syncing Staging With Production For All Repos! Current Directory: "
+        message+=$'\E[33m'
+        message+="${pwd}"
+        message+=$'\E[37m'
+        echo $message && echo $'\n' &&
+        cd ${pwd}
+}
+
+# Sync Stag and Prod Branches OR Master Branch For All Repos
 function syncrepos {
         pwd=${PWD}
         remote="origin"
@@ -191,8 +227,6 @@ function syncrepos {
 		'operator'
 		'opmgmt'
 		'parkenforcer'
-		'parker'
-		'parkerv2'
 		'parkmonitor'
 		'passportwebsite'
 		'paymentgateway'
