@@ -346,3 +346,33 @@ function find_tunnel {
 	ps aux | grep ssh | grep "$1"
 }
 
+# Sync Repos With Virtual Box Image
+function rsyncrepos {
+	repolist=('custom' 'delayedproc2' 'migration' 'mobile' 'mobilepayweb' 'notifications' 'opmgmt' 'parkmonitor' 'paymentgateway' 'ppconfig' 'rate' 'shared' 'strings' 'validation' 'violations')
+	rLen=${#repolist[@]}
+	echo $'\n\E[35m'
+	echo "Starting rsync for repos: ${repolist[@]}"
+	echo $'\n'
+	for (( i=0; i<${rLen}; i++ )); do
+		echo $'\E[31m'
+		remotepath=${repolist[$i]}
+		if [[
+			$remotepath == "notifications" ||
+			$remotepath == "opmgmt"
+		]]; then
+			remotepath="server/$remotepath"
+		fi
+		rsync -ave ssh --delete "/Users/passport/PP/Code/${repolist[$i]}/" vbimage:"~/workspace/$remotepath/"
+		message="Started rsync for repo: '"
+		message+=$'\E[36m'
+		message+=${repolist[$i]}
+		message+=$'\E[31m'
+		message+="'"
+		echo $message
+		echo $'\E[37m'
+	done
+	echo $'\n\E[33m'
+	echo "Rsync has finished for all repos"
+	echo $'\E[37m'
+}
+
