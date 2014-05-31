@@ -1,7 +1,17 @@
 # PassportParking Aliases
 
-# Grep Current Directory for Phrase
+# VBoxManage
+alias startvbimage="VBoxManage startvm 'Ubuntu 14.04 LTS Server' --type headless"
+alias stopvbimage="VBoxManage controlvm 'Ubuntu 14.04 LTS Server' poweroff"
+alias rebootvbimage="VBoxManage controlvm 'Ubuntu 14.04 LTS Server' reset"
+
+# Grep Current Directory for Phrase Excluding Compiled Directories
 function f {
+	grep -r "$1" * --exclude-dir=build --exclude-dir=\.git --exclude-dir=\.idea --exclude-dir=\.settings --exclude-dir=\.metadata --exclude-dir=WEB-INF --exclude-dir=bin
+}
+
+# Grep Current Directory for Phrase
+function ff {
 	grep -r "$1" *
 }
 
@@ -10,19 +20,24 @@ function flog {
 	glp | grep "$1"
 }
 
+# Monitor XAMPP Error Log With The Search Phrase As The First Argument
+function fslog {
+	tail -f /Applications/XAMPP/logs/php_error_log | grep "$1"
+}
+
 # Checkout Bug Branch From Production Branch
 function newbug {
 	if [ "$#" -ne 1 ]; then
 		echo "1 argument required, $# provided"
 		return
 	fi
-	echo $1 | grep -E -q '^[0-9]+$'
-	if [ $? -ne 0 ]; then
-		echo "Numeric argument required, $1 provided"
-		return
-	fi
+	#echo $1 | grep -E -q '^[0-9]+$'
+	#if [ $? -ne 0 ]; then
+	#	echo "Numeric argument required, $1 provided"
+	#	return
+	#fi
 	git checkout production &&
-	git pull origin production &&
+	git pull --rebase origin production &&
 	git checkout -b bug_"$1"
 }
 
@@ -32,13 +47,8 @@ function syncbug {
 		echo "1 argument required, $# provided"
 		return
 	fi
-	echo $1 | grep -E -q '^[0-9]+$'
-	if [ $? -ne 0 ]; then
-		echo "Numeric argument required, $1 provided"
-		return
-	fi
 	git checkout production &&
-	git pull origin production &&
+	git pull --rebase origin production &&
 	git checkout bug_"$1" &&
 	git merge --no-ff -m "Merge branch production into 'bug_$1'" production
 }
@@ -49,13 +59,8 @@ function syncbugstag {
 		echo "1 argument required, $# provided"
 		return
 	fi
-	echo $1 | grep -E -q '^[0-9]+$'
-	if [ $? -ne 0 ]; then
-		echo "Numeric argument required, $1 provided"
-		return
-	fi
 	git checkout staging &&
-	git pull origin staging &&
+	git pull --rebase origin staging &&
 	git checkout bug_"$1" &&
 	git merge --no-ff -m "Merge branch staging into 'bug_$1'" staging
 }
@@ -63,37 +68,31 @@ function syncbugstag {
 # Sync Staging Branch With Production Branch
 function syncstagwithprod {
 	git checkout production &&
-	git pull origin production &&
+	git pull --rebase origin production &&
 	git checkout staging &&
-	git pull origin staging &&
+	git pull --rebase origin staging &&
 	git merge --no-ff -m "Syncing staging branch with production branch" production &&
 	git push origin staging
 }
 
-# Commit Bug Branch Changes
+# Commit Bug Branch Changes With An Optional Commit Message
 function mergebug {
-	if [ "$#" -ne 1 ]; then
-		echo "1 argument required, $# provided"
+	if [ "$#" != "1" -a "$#" != "2" ]; then
+		echo "Illegal number of arguments, $# provided"
 		return
 	fi
-	echo $1 | grep -E -q '^[0-9]+$'
-	if [ $? -ne 0 ]; then
-		echo "Numeric argument required, $1 provided"
-		return
+	git checkout bug_"$1"
+	if [ "$#" == "1" ]; then
+		git commit -m "updated bug_$1"
+	else
+		git commit -m "updated bug_$1 with message '$2'"
 	fi
-	git checkout bug_"$1" &&
-	git commit -m "updated bug_$1"
 }
 
 # Merge Bug Branch Commits Into Stag and Prod Branches
 function mergeall {
 	if [ "$#" -ne 1 ]; then
 		echo "1 argument required, $# provided"
-		return
-	fi
-	echo $1 | grep -E -q '^[0-9]+$'
-	if [ $? -ne 0 ]; then
-		echo "Numeric argument required, $1 provided"
 		return
 	fi
         mergestag "$@" &&
@@ -106,11 +105,6 @@ function mergestag {
 		echo "1 argument required, $# provided"
 		return
 	fi
-	echo $1 | grep -E -q '^[0-9]+$'
-	if [ $? -ne 0 ]; then
-		echo "Numeric argument required, $1 provided"
-		return
-	fi 
 	git checkout bug_"$1" &&
 	git checkout staging &&
 	git pull origin staging &&
@@ -125,11 +119,6 @@ function mergeprod {
 		echo "1 argument required, $# provided"
 		return
 	fi
-	echo $1 | grep -E -q '^[0-9]+$'
-	if [ $? -ne 0 ]; then
-		echo "Numeric argument required, $1 provided"
-		return
-	fi 
 	git checkout bug_"$1" &&
 	git checkout production &&
 	git pull origin production &&
@@ -157,6 +146,14 @@ function syncmasterbranch {
 	git pull origin master
 }
 
+# Sync Development Branch With Remote Branch
+funtion syncdevbranch {
+	git fetch
+	echo $'\n'
+	git checkout development &&
+	git pull origin development
+}
+
 # Sync Staging Branch With Production Branch For All Repos
 function syncstagrepos {
         pwd=${PWD}
@@ -170,9 +167,7 @@ function syncstagrepos {
 		'mobilepaywin'
 		'notifications'
 		'opmgmt'
-		'parkenforcer'
 		'parkmonitor'
-		'passportwebsite'
 		'paymentgateway'
 		'rate'
 		'shared'
@@ -226,9 +221,7 @@ function syncrepos {
 		'notifications'
 		'operator'
 		'opmgmt'
-		'parkenforcer'
 		'parkmonitor'
-		'passportwebsite'
 		'paymentgateway'
 		'ppconfig'
 		'produpdate'
@@ -261,7 +254,6 @@ function syncrepos {
 			$repo == "centralpaydevice" ||
 			$repo == "initscripts" ||
 			$repo == "kegerator" ||
-			$repo == "migration" ||
 			$repo == "mobileapp" ||
 			$repo == "operator" ||
 			$repo == "ppconfig" ||
@@ -272,6 +264,11 @@ function syncrepos {
 			$repo == "testing"
 		]]; then
 			function="syncmasterbranch"
+		fi
+		if [[
+			$repo == "migration"
+		]]; then
+			function="syncdevbranch"
 		fi
 		\cd ~/PP/Code/$repo &&
 	        ${function}
@@ -287,20 +284,20 @@ function syncrepos {
 }
 
 # Lsyncd Aliases (VirtualBox Server Syncing)
-alias lsyncdcustom="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repocustom.lua'"
-alias lsyncddp2="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repodelayedproc2.lua'"
-alias lsyncdmpw="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repomobilepayweb.lua'"
-alias lsyncdmobile="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repomobile.lua'"
-alias lsyncdnot="sudo lsyncd '/Users/passport/lsyncd/ppconfig/reponotifications.lua'"
-alias lsyncdopmgmt="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repoopmgmt.lua'"
-alias lsyncdpm="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repoparkmonitor.lua'"
-alias lsyncdpg="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repopaymentgateway.lua'"
-alias lsyncdppc="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repoppconfig.lua'"
-alias lsyncdrate="sudo lsyncd '/Users/passport/lsyncd/ppconfig/reporate.lua'"
-alias lsyncdshared="sudo lsyncd '/Users/passport/lsyncd/ppconfig/reposhared.lua'"
-alias lsyncdstrings="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repostrings.lua'"
-alias lsyncdvalidation="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repovalidation.lua'"
-alias lsyncdviolations="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repoviolations.lua'"
+#alias lsyncdcustom="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repocustom.lua'"
+#alias lsyncddp2="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repodelayedproc2.lua'"
+#alias lsyncdmpw="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repomobilepayweb.lua'"
+#alias lsyncdmobile="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repomobile.lua'"
+#alias lsyncdnot="sudo lsyncd '/Users/passport/lsyncd/ppconfig/reponotifications.lua'"
+#alias lsyncdopmgmt="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repoopmgmt.lua'"
+#alias lsyncdpm="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repoparkmonitor.lua'"
+#alias lsyncdpg="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repopaymentgateway.lua'"
+#alias lsyncdppc="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repoppconfig.lua'"
+#alias lsyncdrate="sudo lsyncd '/Users/passport/lsyncd/ppconfig/reporate.lua'"
+#alias lsyncdshared="sudo lsyncd '/Users/passport/lsyncd/ppconfig/reposhared.lua'"
+#alias lsyncdstrings="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repostrings.lua'"
+#alias lsyncdvalidation="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repovalidation.lua'"
+#alias lsyncdviolations="sudo lsyncd '/Users/passport/lsyncd/ppconfig/repoviolations.lua'"
 
 # Start SSH Tunnels
 function start_tunnels {
