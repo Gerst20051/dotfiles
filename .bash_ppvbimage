@@ -74,6 +74,18 @@ function fshlog {
         cat /var/log/syslog | grep "$1"
 }
 
+function fshlogg {
+	tac /var/log/syslog | grep "$1"
+}
+
+function fselog {
+	tailf /var/log/apache2/error.log | grep "$1"
+}
+
+function fsrlog {
+	tailf ~/workspace/rate/rate_calc/rateengine.log | grep "$1"
+}
+
 # CD Aliases
 alias cdcustom="cd ~/workspace/custom"
 alias cddp2="cd ~/workspace/delayedproc2"
