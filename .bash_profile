@@ -258,6 +258,9 @@ alias grr='git remote rm'
 alias grc='git rm --cached'
 alias gpu='git pull'
 alias gcl='git clone'
+alias grhard='git reset --hard HEAD^'
+alias grsoft='git reset --soft HEAD^'
+alias grapply='git commit -C ORIG_HEAD'
 
 # XAMPP Aliases
 alias xampp='sudo /applications/xampp/xamppfiles/xampp'
