@@ -1,0 +1,14 @@
+# Git Ignore for PassportParking
+
+# OS Generated Files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+!icons
+ehthumbs.db
+Thumbs.db
+
