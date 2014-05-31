@@ -7,8 +7,9 @@ else
 	set background=dark
 endif
 
-colorscheme solarized
+"colorscheme solarized
 set t_Co=256
+colorscheme distinguished
 set showmode
 set nowrap
 "set tabstop=4
