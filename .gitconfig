@@ -3,5 +3,18 @@
 	email = gerst20051@gmail.com
 
 [core]
-    excludesfile = ~/.gitignore
+	excludesfile = ~/.gitignore
+
+[alias]
+	conflicts = diff --name-only --diff-filter=U
+	unstage = reset HEAD --
+	myfiles = whatchanged --author=andrew --all
+	fixup = !sh -c 'git commit -m \"fixup! $(git log -1 --format='\\''%s'\\'' $@)\"' -
+	squash = !sh -c 'git commit -m \"squash! $(git log -1 --format='\\''%s'\\'' $@)\"' -
+[merge]
+	conflictstyle = diff3
+[push]
+	default = simple
+[rebase]
+	autosquash = true
 

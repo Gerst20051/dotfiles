@@ -19,8 +19,20 @@ alias grepword="grep -Hnr"
 alias grepfiles="grep -l"
 alias grepnot="grep -v"
 
+# Source git completion
+test -f ~/.git-completion.bash && . $_
+
 # Change prompt
 export PS1="\n\[\e[0;36m\]┌─[\[\e[0m\]\[\e[1;33m\]\u\[\e[0m\]\[\e[1;36m\] @ \[\e[0m\]\[\e[1;33m\]\h\[\e[0m\]\[\e[0;36m\]]─[\[\e[0m\]\[\e[1;34m\]\w\[\e[0m\]\[\e[0;36m\]]\[\e[0;36m\]─[\[\e[0m\]\[\e[0;31m\]\!\[\e[0m\]\[\e[0;36m\]]\[\e[0m\]\n\[\e[0;36m\]└─[\[\e[0m\]\[\e[1;37m\]\$\[\e[0m\]\[\e[0;36m\]]› \[\e[0m\]"
+
+function parse_git_dirty {
+	[[ $(git status | tail -n1) != "nothing to commit (working directory clean)" ]] && echo "*"
+}
+
+function parse_git_branch {
+	git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/[\1$(parse_git_dirty)]/"
+}
+#export PS1='\u@\h \[\033[1;33m\]\w\[\033[0m\]$(parse_git_branch)$ '
 
 function prompt {
 	# set prompt to mac default
@@ -31,24 +43,24 @@ function prompt {
 }
 
 function prompt1 {
-  local BLUE="\[\033[0;34m\]"
-  local DARK_BLUE="\[\033[1;34m\]"
-  local RED="\[\033[0;31m\]"
-  local DARK_RED="\[\033[1;31m\]"
-  local NO_COLOR="\[\033[0m\]"
-  case $TERM in
-    xterm*|rxvt*)
-      TITLEBAR='\[\033]0;\u@\h:\w\007\]'
-      ;;
-    *)
-      TITLEBAR=""
-      ;;
-  esac
-  PS1="\u@\h [\t]> "
-  PS1="${TITLEBAR}\
-  $BLUE\u@\h $RED[\t]>$NO_COLOR "
-  PS2='continue-> '
-  PS4='$0.$LINENO+ '
+	local BLUE="\[\033[0;34m\]"
+	local DARK_BLUE="\[\033[1;34m\]"
+	local RED="\[\033[0;31m\]"
+	local DARK_RED="\[\033[1;31m\]"
+	local NO_COLOR="\[\033[0m\]"
+	case $TERM in
+		xterm*|rxvt*)
+			TITLEBAR='\[\033]0;\u@\h:\w\007\]'
+			;;
+		*)
+			TITLEBAR=""
+			;;
+	esac
+	PS1="\u@\h [\t]> "
+	PS1="${TITLEBAR}\
+	$BLUE\u@\h $RED[\t]>$NO_COLOR "
+	PS2='continue-> '
+	PS4='$0.$LINENO+ '
 }
 
 function prompt2 {
@@ -62,7 +74,6 @@ function prompt2 {
 		fi
 		echo "${partial}"
 	}
-
 	PS1="\![\h]\$(__cwd3)> "
 }
 
@@ -159,6 +170,9 @@ alias rmdir="rmdir -p"
 # prety-print of PATH variable
 alias path="echo -e ${PATH//:/\\\n}"
 
+# print file permissions for ls
+alias cls="ls -l | awk '{k = 0; for (i = 0; i <= 8; i++) k += ((substr(\$1, i + 2, 1)~/[rwx]/) * 2 ^ (8 - i)); if (k) printf(\"%0o \", k); print;}'"
+
 # go back x directories
 b(){
 	str=""
@@ -226,11 +240,11 @@ function emailtofunc {
 		echo "File Sent: $file"
 		echo "$message"
 		scp $file unc":~/email/tmp.txt"
-		unc "emailto '$1' '$2' '$message' 'file'"  
+		unc "emailto '$1' '$2' '$message' 'file'"
 	else
 		message="$3"
 		echo "Message Sent: $message"
-		unc "emailto '$1' '$2' '$message'"  
+		unc "emailto '$1' '$2' '$message'"
 	fi
 }
 alias emailto='emailtofunc'
@@ -241,8 +255,10 @@ alias ga.='git add .'
 alias gaa='git add -A'
 alias gu='git pull'
 alias gp='git push'
-alias gl='git log --color --pretty=format:"%Cgreen%h %Creset %s %Cblueby %an (%ar) %Cred %d" --graph'
-alias glp='git log -p --color --pretty=format:"%Cgreen%h %Creset %s %Cblueby %an (%ar) %Cred %d" --graph'
+#alias gl='git log --color --pretty=format:"%Cgreen%h %Creset %s %Cblueby %an (%ar) %Cred %d" --graph'
+#alias glp='git log -p --color --pretty=format:"%Cgreen%h %Creset %s %Cblueby %an (%ar) %Cred %d" --graph'
+alias gl='git log --color --graph --pretty=format:"%Cred%h%Creset - %s %Cgreen(%cr) %C(bold blue)<%an>%Creset%C(yellow)%d%Creset" --abbrev-commit --'
+alias glp='git log -p --color --graph --pretty=format:"%Cred%h%Creset - %s %Cgreen(%cr) %C(bold blue)<%an>%Creset%C(yellow)%d%Creset" --abbrev-commit --'
 alias gsl='git shortlog -sne'
 alias gs='git status'
 alias gh='git show --color'
@@ -258,8 +274,11 @@ alias grr='git remote rm'
 alias grc='git rm --cached'
 alias gpu='git pull'
 alias gcl='git clone'
+alias gri='git rebase -i --autosquash'
 alias grhard='git reset --hard HEAD^'
 alias grsoft='git reset --soft HEAD^'
+alias grmixed='git reset --mixed HEAD^'
+alias grmerge='git reset --merge ORIG_HEAD'
 alias grapply='git commit -C ORIG_HEAD'
 
 # XAMPP Aliases
@@ -288,36 +307,36 @@ alias cdnetai='cd ~/Web/Git/HnS-Netai/src'
 alias cdjs='cd ~/Web/Git/JavaScript'
 
 function directory_to_titlebar {
-	local pwd_length=42  # The maximum length we want (seems to fit nicely
-			     # in a default length Terminal title bar).
+	local pwd_length=42 # The maximum length we want (seems to fit nicely
+	# in a default length Terminal title bar).
 
 	# Get the current working directory. We'll format it in $dir.
-	local dir="$PWD"     
+	local dir="$PWD"
 
 	# Substitute a leading path that's in $HOME for "~"
 	if [[ "$HOME" == ${dir:0:${#HOME}} ]]; then
 		dir="~${dir:${#HOME}}"
 	fi
-	
+
 	# Append a trailing slash if it's not there already.
-	if [[ ${dir:${#dir}-1} != "/" ]]; then 
+	if [[ ${dir:${#dir}-1} != "/" ]]; then
 		dir="$dir/"
 	fi
 
 	# Truncate if we're too long.
 	# We preserve the leading '/' or '~/', and substitute
 	# ellipses for some directories in the middle.
-	if [[ "$dir" =~ (~){0,1}/.*(.{${pwd_length}}) ]]; then  
+	if [[ "$dir" =~ (~){0,1}/.*(.{${pwd_length}}) ]]; then
 		local tilde=${BASH_REMATCH[1]}
 		local directory=${BASH_REMATCH[2]}
-		
-		# At this point, $directory is the truncated end-section of the 
+
+		# At this point, $directory is the truncated end-section of the
 		# path. We will now make it only contain full directory names
 		# (e.g. "ibrary/Mail" -> "/Mail").
 		if [[ "$directory" =~ [^/]*(.*) ]]; then
-			directory=${BASH_REMATCH[1]} 
+			directory=${BASH_REMATCH[1]}
 		fi
-		
+
 		# Can't work out if it's possible to use the Unicode ellipsis,
 		# '…' (Unicode 2026). Directly embedding it in the string does not
 		# seem to work, and \u escape sequences ('\u2026') are not expanded.
@@ -325,7 +344,7 @@ function directory_to_titlebar {
 		dir="$tilde/...$directory"
 	fi
 
-	# Don't embed $dir directly in printf's first argument, because it's 
+	# Don't embed $dir directly in printf's first argument, because it's
 	# possible it could contain printf escape sequences.
 	printf "\033]0;%s\007" "$dir"
 }
