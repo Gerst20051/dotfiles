@@ -1,0 +1,35 @@
+'editor':
+  'showInvisibles': true
+  'showIndentGuide': true
+  'showLineNumbers': true
+  'tabLength': 4
+  'fontSize': 15
+'core':
+  'themes': [
+    'atom-dark-ui'
+    'atom-dark-syntax'
+    'base16-tomorrow-dark-theme'
+  ]
+  'ignoredNames': [
+    '.git'
+    '.svn'
+    '.DS_Store'
+  ]
+  'projectHome': '/Users/gerst/Web/'
+'exception-reporting':
+  'userId': '8e41da33-9964-d371-50d3-fc37f2da071b'
+'welcome':
+  'showOnStartup': false
+'metrics':
+  'userId': 'b03a136d3963beafbeb7afaa1ca3657f7b0f33b7'
+'markdown-preview':
+  'grammars': [
+    'source.gfm'
+    'source.litcoffee'
+    'text.plain'
+    'text.plain.null-grammar'
+  ]
+'tree-view': {}
+'whitespace':
+  'ensureSingleTrailingWhitespace': true
+  'removeTrailingWhitespace': true
