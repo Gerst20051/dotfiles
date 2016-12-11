@@ -6,6 +6,8 @@
 .Spotlight-V100
 .Trashes
 Icon?
+!icon
+!Icons
 ehthumbs.db
 Thumbs.db
 
@@ -40,4 +42,3 @@ Thumbs.db
 ignore/
 config.php
 mysql.config.php
-
