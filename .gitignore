@@ -42,3 +42,7 @@ Thumbs.db
 ignore/
 config.php
 mysql.config.php
+
+# Other #
+#########
+node_modules
