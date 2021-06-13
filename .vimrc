@@ -94,6 +94,6 @@ endfunction
 " Trim Trailing Whitespace On Save
 autocmd BufWritePre * :%s/\s\+$//e
 
-" Savd A Read-Only File Using :w!!
+" Save A Read-Only File Using :w!!
 cmap w!! w !sudo tee > /dev/null %
 
